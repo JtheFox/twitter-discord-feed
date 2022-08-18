@@ -4,11 +4,14 @@ require("dotenv").config();
 const { Client } = require("twitter-api-sdk");
 const { EmbedBuilder, WebhookClient } = require("discord.js");
 
-const contentMatch = /nerf(s)?|buff(s)?|change(s)?:?\n/gmi;
-const contentNotMatch = /skin(s)?|model(s)?|chroma(s)?/gmi;
+// Global lambda variable
 let lastTweetId;
 
 exports.handler = async (event) => {
+  // Tweet filters
+  const contentMatch = /nerf(s)?|buff(s)?|change(s)?.*\n/i;
+  const contentNotMatch = /skin(s)?|model(s)?|chroma(s)?/i;
+
   // Instantiate Twitter client
   const webhookClient = new WebhookClient({ url: process.env.DISCORD_WEBHOOK_URL })
   const client = new Client(process.env.TWITTER_BEARER_TOKEN);
@@ -46,8 +49,10 @@ exports.handler = async (event) => {
 
   // Filter recent tweets for relevant content
   const tweetsData = Array.from(tweets.data).reverse();
-  const primaryFilter = tweetsData.filter(({ text, in_reply_to_user_id }) =>
-    !in_reply_to_user_id && contentMatch.test(text) && !contentNotMatch.test(text))
+  const primaryFilter = tweetsData.filter(({ text, in_reply_to_user_id }) => {
+    const contentMatched = (contentMatch.test(text) && !contentNotMatch.test(text));
+    return !in_reply_to_user_id && contentMatched;
+  });
   const secondaryFilter = tweetsData.filter(t => {
     const refs = t.referenced_tweets?.map(({ id }) => id);
     return primaryFilter.includes(t) || primaryFilter.find(({ id }) => refs?.includes(id));
