@@ -62,7 +62,7 @@ exports.handler = async (event) => {
 
     // Create embed from tweet data
     return new EmbedBuilder()
-      .setColor('#28c700')
+      .setColor('#c1d260')
       .setTitle(champ)
       .setURL(tweets_url + id)
       .setDescription(changes.trim().replaceAll('*', '\u2022'))
