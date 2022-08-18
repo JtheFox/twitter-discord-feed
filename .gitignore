@@ -105,3 +105,6 @@ dist
 
 # Development files
 _dev-*
+
+# Deploy zip files
+*.zip
