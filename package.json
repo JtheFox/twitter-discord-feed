@@ -1,0 +1,26 @@
+{
+  "name": "twitter-discord-webhook",
+  "version": "1.0.0",
+  "description": "Webhook to send specific Twitter activity to a Discord channel",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node handler.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JtheFox/twitter-discord-webhook.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JtheFox/twitter-discord-webhook/issues"
+  },
+  "homepage": "https://github.com/JtheFox/twitter-discord-webhook#readme",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "twit": "^2.2.11",
+    "twitter-api-sdk": "^1.1.0"
+  }
+}
