@@ -64,13 +64,14 @@ exports.handler = async (event) => {
     const { text, id, created_at } = tweetData;
     const { username, profile_image_url, profile_url, tweets_url } = userData;
     const [champ, changes] = text.split(':');
+    const changelist = changes.trim().replaceAll('*', '\u2022')
 
     // Create embed from tweet data
     return new EmbedBuilder()
       .setColor('#c1d260')
       .setTitle(champ)
       .setURL(tweets_url + id)
-      .setDescription(changes.trim().replaceAll('*', '\u2022'))
+      .setDescription(changelist)
       .setAuthor({
         name: username,
         url: profile_url,
@@ -82,6 +83,7 @@ exports.handler = async (event) => {
       })
   }
 
+  // Send to Discord webhook
   for await (const tweet of secondaryFilter) {
     try {
       await webhookClient.send({
