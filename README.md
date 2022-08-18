@@ -31,5 +31,6 @@ My friends and I constantly check Spideraxe30's Twitter for upcoming League of L
 - Modify the tweet data array filter and Discord embed creation
 
 ## Deployment
+- Create a `.zip` file with `nodule_modules`, `.env`, and `index.js`
 - [Deploy Node.js Lambda functions with .zip file archives](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-package.html)
 - [Schedule AWS Lambda Functions Using CloudWatch Events](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/RunLambdaSchedule.html)
