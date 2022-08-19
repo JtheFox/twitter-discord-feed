@@ -43,7 +43,7 @@ exports.handler = async (event) => {
   // Get last tweet id
   const response = await fetch(process.env.STORED_JSON_URL);
   let lastTweet = await response.json();
-
+  
   // Get user data
   const userId = process.env.TWITTER_USER_ID;
   const user = await client.users.findUserById(userId, {
@@ -60,7 +60,7 @@ exports.handler = async (event) => {
 
   // Get recent tweets
   const tweets = await client.tweets.usersIdTweets(userId, {
-    "since_id": response.id,
+    "since_id": lastTweet.id,
     "max_results": 100,
     "tweet.fields": [
       "text",
