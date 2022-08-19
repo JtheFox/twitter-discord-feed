@@ -18,7 +18,6 @@ My friends and I constantly check Spideraxe30's Twitter for upcoming League of L
 ## Example
 ![Clogged Twitter feed vs clean Discord feed](./assets/twitter-vs-tweetbot.png)
 
-
 ## Requirements
 * [NodeJS](https://nodejs.org/en/)
 * [AWS](https://aws.amazon.com/) account with [IAM](https://aws.amazon.com/iam/) permissions for [Lambda](https://aws.amazon.com/lambda/), [EventBridge](https://aws.amazon.com/eventbridge/), and [CloudWatch](https://aws.amazon.com/cloudwatch/)
@@ -31,6 +30,6 @@ My friends and I constantly check Spideraxe30's Twitter for upcoming League of L
 - Modify the tweet data array filter and Discord embed creation
 
 ## Deployment
-- Create a `.zip` file with `nodule_modules`, `.env`, and `index.js`
-- [Deploy Node.js Lambda functions with .zip file archives](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-package.html)
+- Create a `functions.zip` file with `nodule_modules`, `.env`, and `index.js`
+- Run `npm run deploy`
 - [Schedule AWS Lambda Functions Using CloudWatch Events](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/RunLambdaSchedule.html)
