@@ -3,6 +3,7 @@
 require("dotenv").config();
 const { Client } = require("twitter-api-sdk");
 const { EmbedBuilder, WebhookClient } = require("discord.js");
+const fetch = require("node-fetch");
 const dayjs = require("dayjs");
 
 // Function to create Discord embeds
