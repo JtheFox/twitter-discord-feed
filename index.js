@@ -8,10 +8,11 @@ const dayjs = require("dayjs");
 
 // Function to create Discord embeds
 const createEmbed = (tweetData, userData) => {
+  const mediaFilter = /https:\/\/t.co/g
   // Destructure variables
   const { text, id, created_at } = tweetData;
   const { username, profile_image_url, profile_url, tweets_url } = userData;
-  const [champ, changes] = text.split(':');
+  const [champ, changes] = text.split(mediaFilter)[0].split(':');
   const changelist = changes.trim().replaceAll('*', '\u2022')
 
   // Create embed from tweet data
@@ -81,17 +82,13 @@ exports.handler = async (event) => {
 
   // Filter recent tweets for relevant content
   const tweetsData = Array.from(tweets.data).reverse();
-  const primaryFilter = tweetsData.filter(({ text, in_reply_to_user_id }) => {
+  const filteredTweets = tweetsData.filter(({ text, in_reply_to_user_id }) => {
     const contentMatched = (contentMatch.test(text) && !contentNotMatch.test(text));
-    return !in_reply_to_user_id && contentMatched;
-  });
-  const secondaryFilter = tweetsData.filter(t => {
-    const refs = t.referenced_tweets?.map(({ id }) => id);
-    return primaryFilter.includes(t) || primaryFilter.find(({ id }) => refs?.includes(id));
+    return (!in_reply_to_user_id || in_reply_to_user_id === process.env.TWITTER_USER_ID) && contentMatched;
   });
 
   // Send to Discord webhook
-  for await (const tweet of secondaryFilter) {
+  for await (const tweet of filteredTweets) {
     try {
       await webhookClient.send({
         embeds: [createEmbed(tweet, userData)]
