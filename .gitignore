@@ -103,8 +103,8 @@ dist
 # TernJS port file
 .tern-port
 
-# Development files
-_dev-*
+# ID file
+id
 
 # Deploy zip files
 *.zip

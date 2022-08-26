@@ -1,9 +1,9 @@
 'use strict';
 
 require("dotenv").config();
+const { readFile, writeFile } = require('fs').promises;;
 const { Client } = require("twitter-api-sdk");
 const { EmbedBuilder, WebhookClient } = require("discord.js");
-const fetch = require("node-fetch");
 const dayjs = require("dayjs");
 
 // Function to create Discord embeds
@@ -33,6 +33,9 @@ const createEmbed = (tweetData, userData) => {
 }
 
 exports.handler = async (event) => {
+  // Log start of function
+  console.log('Checking for new tweets');
+
   // Tweet filters
   const contentMatch = /nerf(s)?|buff(s)?|change(s)?.*\n/i;
   const contentNotMatch = /skin(s)?|model(s)?|chroma(s)?/i;
@@ -42,8 +45,8 @@ exports.handler = async (event) => {
   const client = new Client(process.env.TWITTER_BEARER_TOKEN);
 
   // Get last tweet id
-  const response = await fetch(process.env.STORED_JSON_URL);
-  let lastTweet = await response.json();
+  const idFile = await readFile('id');
+  const lastTweet = idFile.toString();
 
   // Get user data
   const userId = process.env.TWITTER_USER_ID;
@@ -61,7 +64,7 @@ exports.handler = async (event) => {
 
   // Get recent tweets
   const tweets = await client.tweets.usersIdTweets(userId, {
-    "since_id": lastTweet.id,
+    "since_id": lastTweet,
     "max_results": 100,
     "tweet.fields": [
       "text",
@@ -76,12 +79,15 @@ exports.handler = async (event) => {
     ]
   });
 
-  // Update last pulled tweet index for next query
-  lastTweet = { "id": tweets.data[0].id }
-  const storedTweetId = await fetch(process.env.STORED_JSON_URL, { method: 'POST', body: lastTweet });
-  console.log('Updated Tweet ID: ', storedTweetId)
+  // Update last pulled tweet index for next query if new tweets
+  if (!tweets.data) {
+    console.log('No new tweets since last check');
+    process.exit(0);
+  }
+  await writeFile('id', tweets.data[0].id);
 
   // Filter recent tweets for relevant content
+  console.log('Checking new tweets for relevant content');
   const tweetsData = Array.from(tweets.data).reverse();
   const filteredTweets = tweetsData.filter(({ text, in_reply_to_user_id }) => {
     const contentMatched = (contentMatch.test(text) && !contentNotMatch.test(text));
@@ -97,6 +103,8 @@ exports.handler = async (event) => {
     } catch (err) {
       console.error(err);
     }
-  };
+  }
+
+  console.log(filteredTweets.length ? 'Posted new balance change tweet(s)!' : 'No relevant new tweets to post');
 }
 
