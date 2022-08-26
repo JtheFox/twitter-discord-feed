@@ -78,7 +78,8 @@ exports.handler = async (event) => {
 
   // Update last pulled tweet index for next query
   lastTweet = { "id": tweets.data[0].id }
-  await fetch(process.env.STORED_JSON_URL, { method: 'POST', body: lastTweet });
+  const storedTweetId = await fetch(process.env.STORED_JSON_URL, { method: 'POST', body: lastTweet });
+  console.log('Updated Tweet ID: ', storedTweetId)
 
   // Filter recent tweets for relevant content
   const tweetsData = Array.from(tweets.data).reverse();
