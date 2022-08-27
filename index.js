@@ -10,26 +10,29 @@ const dayjs = require("dayjs");
 const createEmbed = (tweetData, userData) => {
   const mediaFilter = /https:\/\/t.co/g
   // Destructure variables
-  const { text, id, created_at } = tweetData;
+  const { id, created_at } = tweetData;
+  const text = tweetData.text.split(mediaFilter)[0].replace(/&amp;/g, '&');
   const { username, profile_image_url, profile_url, tweets_url } = userData;
-  const [champ, changes] = text.split(mediaFilter)[0].split(':');
-  const changelist = changes.trim().replaceAll('*', '\u2022')
+  const [champ, changes] = text.split(':');
+  const changelist = changes?.trim().replaceAll('*', '\u2022');
 
   // Create embed from tweet data
-  return new EmbedBuilder()
-    .setColor('#c1d260')
-    .setTitle(champ)
-    .setURL(tweets_url + id)
-    .setDescription(changelist)
-    .setAuthor({
-      name: username,
-      url: profile_url,
-      iconURL: profile_image_url
-    })
-    .setFooter({
-      text: 'Tweeted at ' + dayjs(created_at).format('h:mm A'),
-      iconURL: 'https://i0.wp.com/www.apacph.org/wp/wp-content/uploads/2014/03/Twitter-Logo-New-.png?fit=518%2C518&ssl=1'
-    })
+  const changesEmbed = new EmbedBuilder()
+  .setColor('#c1d260')
+  .setTitle(champ)
+  .setURL(tweets_url + id)
+  .setDescription(changelist)
+  .setAuthor({
+    name: username,
+    url: profile_url,
+    iconURL: profile_image_url
+  })
+  .setFooter({
+    text: 'Tweeted at ' + dayjs(created_at).format('h:mm A'),
+    iconURL: 'https://i0.wp.com/www.apacph.org/wp/wp-content/uploads/2014/03/Twitter-Logo-New-.png?fit=518%2C518&ssl=1'
+  })
+  if (champ && changes) return changesEmbed.setTitle(champ).setDescription(changelist);
+  else return changesEmbed.setTitle(text.trim());
 }
 
 exports.handler = async (event) => {
