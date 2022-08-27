@@ -27,10 +27,10 @@ My friends and I constantly check Spideraxe30's Twitter for upcoming League of L
 - Clone the repository
 - Run `npm install` in the project
 - Remove the `.EXAMPLE` extension from the `.env` file and set the variables with your data
-- Remove the `.EXAMPLE` extension from the `id` file
+- Remove the `.EXAMPLE` extension from the `/tmp/id` file
 - Modify the tweet data array filter and Discord embed creation to your desired content filter
 
 ## Deployment
-- Create a `functions.zip` file with `nodule_modules`, `.env`, `id`, and `index.js`
+- Create a `functions.zip` file with `nodule_modules`, `tmp`, `.env`, and `index.js`
 - Run `npm run deploy`
 - [Schedule AWS Lambda Functions Using CloudWatch Events](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/RunLambdaSchedule.html)
