@@ -21,7 +21,6 @@ const createEmbed = (tweetData, userData) => {
   .setColor('#c1d260')
   .setTitle(champ)
   .setURL(tweets_url + id)
-  .setDescription(changelist)
   .setAuthor({
     name: username,
     url: profile_url,
@@ -48,7 +47,7 @@ exports.handler = async (event) => {
   const client = new Client(process.env.TWITTER_BEARER_TOKEN);
 
   // Get last tweet id
-  const idFile = await readFile('id');
+  const idFile = await readFile('tmp/id');
   const lastTweet = idFile.toString();
 
   // Get user data
@@ -87,7 +86,7 @@ exports.handler = async (event) => {
     console.log('No new tweets since last check');
     process.exit(0);
   }
-  await writeFile('id', tweets.data[0].id);
+  await writeFile('tmp/id', tweets.data[0].id);
 
   // Filter recent tweets for relevant content
   console.log('Checking new tweets for relevant content');
