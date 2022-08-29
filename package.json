@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node run.js",
     "start": "node index.js",
-    "deploy": "aws lambda update-function-code --function-name spideraxe-changes-bot --zip-file fileb://function.zip && rm function.zip"
+    "build": "node build.js",
+    "deploy": "aws lambda update-function-code --function-name spideraxe-changes-bot --zip-file fileb://dist/function.zip"
   },
   "repository": {
     "type": "git",
@@ -26,5 +27,9 @@
     "dotenv": "^16.0.1",
     "twit": "^2.2.11",
     "twitter-api-sdk": "^1.1.0"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-zip": "^5.1.0"
   }
 }
