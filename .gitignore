@@ -104,7 +104,7 @@ dist
 .tern-port
 
 # ID file
-id
+id.txt
 
 # Deploy zip files
 *.zip

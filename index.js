@@ -1,7 +1,7 @@
 'use strict';
 
 require("dotenv").config();
-const { readFile, writeFile } = require('fs').promises;;
+const axios = require('axios');
 const { Client } = require("twitter-api-sdk");
 const { EmbedBuilder, WebhookClient } = require("discord.js");
 const dayjs = require("dayjs");
@@ -18,18 +18,18 @@ const createEmbed = (tweetData, userData) => {
 
   // Create embed from tweet data
   const changesEmbed = new EmbedBuilder()
-  .setColor('#c1d260')
-  .setTitle(champ)
-  .setURL(tweets_url + id)
-  .setAuthor({
-    name: username,
-    url: profile_url,
-    iconURL: profile_image_url
-  })
-  .setFooter({
-    text: 'Tweeted at ' + dayjs(created_at).format('h:mm A'),
-    iconURL: 'https://i0.wp.com/www.apacph.org/wp/wp-content/uploads/2014/03/Twitter-Logo-New-.png?fit=518%2C518&ssl=1'
-  })
+    .setColor('#c1d260')
+    .setTitle(champ)
+    .setURL(tweets_url + id)
+    .setAuthor({
+      name: username,
+      url: profile_url,
+      iconURL: profile_image_url
+    })
+    .setFooter({
+      text: 'Tweeted at ' + dayjs(created_at).format('h:mm A'),
+      iconURL: 'https://i0.wp.com/www.apacph.org/wp/wp-content/uploads/2014/03/Twitter-Logo-New-.png?fit=518%2C518&ssl=1'
+    })
   if (champ && changes) return changesEmbed.setTitle(champ).setDescription(changelist);
   else return changesEmbed.setTitle(text.trim());
 }
@@ -47,8 +47,9 @@ exports.handler = async (event) => {
   const client = new Client(process.env.TWITTER_BEARER_TOKEN);
 
   // Get last tweet id
-  const idFile = await readFile('tmp/id');
-  const lastTweet = idFile.toString();
+  const apiUrl = 'https://77ljoihrc2.execute-api.us-east-1.amazonaws.com/Prod/';
+  const res = await axios.get(apiUrl + process.env.STORAGE_ID);
+  const lastTweet = res.data.content;
 
   // Get user data
   const userId = process.env.TWITTER_USER_ID;
@@ -86,7 +87,9 @@ exports.handler = async (event) => {
     console.log('No new tweets since last check');
     process.exit(0);
   }
-  await writeFile('tmp/id', tweets.data[0].id);
+
+  const config = { headers: { 'Content-Type': 'text/plain' } };
+  await axios.post(apiUrl + process.env.STORAGE_ID, tweets.data[0].id, config);
 
   // Filter recent tweets for relevant content
   console.log('Checking new tweets for relevant content');

@@ -22,15 +22,15 @@ My friends and I constantly check Spideraxe30's Twitter for upcoming League of L
 * [NodeJS](https://nodejs.org/en/)
 * [AWS](https://aws.amazon.com/) account with [IAM](https://aws.amazon.com/iam/) permissions for [Lambda](https://aws.amazon.com/lambda/), [EventBridge](https://aws.amazon.com/eventbridge/), and [CloudWatch](https://aws.amazon.com/cloudwatch/)
 * [AWS CLI](https://aws.amazon.com/cli/)
+* [Stored text ID from Store-A-String API](https://github.com/JtheFox/store-a-string)
 
 ## Installation & Configuration
 - Clone the repository
 - Run `npm install` in the project
 - Remove the `.EXAMPLE` extension from the `.env` file and set the variables with your data
-- Remove the `.EXAMPLE` extension from the `/tmp/id` file
 - Modify the tweet data array filter and Discord embed creation to your desired content filter
 
 ## Deployment
-- Create a `functions.zip` file with `nodule_modules`, `tmp`, `.env`, and `index.js`
+- Create a `functions.zip` file with `nodule_modules`, `.env`, and `index.js`
 - Run `npm run deploy`
 - [Schedule AWS Lambda Functions Using CloudWatch Events](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/RunLambdaSchedule.html)
